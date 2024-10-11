@@ -11,7 +11,5 @@ const dbConnect = async () => {
         process.exit(1);
     }
 }
-// mongoose.connect(process.env.MONGODB_URI , { useNewUrlParser : true, useUnifiedTopology : true})
-// .then((res)=>console.log('> DB Connected...'))
-// .catch(err=>console.log(`> Error while connecting to mongoDB : ${err.message}`))
+
 module.exports = { dbConnect }

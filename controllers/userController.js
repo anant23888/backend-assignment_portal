@@ -45,7 +45,6 @@ exports.registerUser = (req, res) => {
             })
         }
     }).catch( err => {
-        console.log(err);
         res.json({
             status: "Failed",
             message: "An error occured while checking user!"
@@ -57,7 +56,6 @@ exports.loginUser = async(req, res) => {
     const {username, password} = req.body;
     try {
     const user = await User.findOne({username});
-    console.log(user)
     if(!user || !(await user.comparePassword(password))) {
         return res.status(400).json({
             status: "Failed",
@@ -69,7 +67,7 @@ exports.loginUser = async(req, res) => {
         process.env.JWT_SECRET, 
         { expiresIn: '1h' }
     );
-    // localStorage.setItem('token', token);
+
     res.status(200).json({
         status: "Success",
         message: "Login successful!",
@@ -89,12 +87,10 @@ exports.uploadAssignment = async(req, res) => {
     const userId = req.user.id;
     try {
         const adminUser = await User.findOne({ username: admin, role: 'Admin' });
-        console.log(adminUser);
         if (!adminUser) {
             return res.status(404).json({ message: 'Admin not found' });
         }
         const assignment = new Assignment({ userId, task, admin: admin});
-        console.log(assignment)
         await assignment.save();
         res.status(201).json({ 
             message: 'Assignment uploaded successfully',
@@ -108,7 +104,6 @@ exports.uploadAssignment = async(req, res) => {
 exports.getAllAdmins = async(req,res) => {
     try {
         const admins = await User.find({role: 'Admin'}, {username: 1, _id: 1});
-        console.log(admins)
         res.status(200).json({
             status: "Success",
             admins
